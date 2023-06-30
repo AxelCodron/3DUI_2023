@@ -30,10 +30,17 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody _rb;
     private Vector3 _moveDirection;
 
+    private AudioSource _audioSource; // Ajout de l'AudioSource
+    public AudioClip woodStepClip; // AudioClip pour le son "wood_step"
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _rb.freezeRotation = true;
+
+        _audioSource = gameObject.AddComponent<AudioSource>();
+        _audioSource.loop = true;
+        _audioSource.clip = woodStepClip;
     }
 
     void Update()
@@ -44,6 +51,19 @@ public class PlayerMovement : MonoBehaviour
         SpeedControl();
         
         _rb.drag = _isGrounded ? groundDrag : 0f;
+
+        // Lecture en boucle de l'audio lorsque le joueur avance
+        if (_isGrounded && (_horizontal != 0 || _vertical != 0))
+        {
+            if (!_audioSource.isPlaying)
+            {
+                _audioSource.Play();
+            }
+        }
+        else
+        {
+            _audioSource.Stop();
+        }
     }
 
     private void FixedUpdate()
