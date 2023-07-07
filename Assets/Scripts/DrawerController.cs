@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DrawerController : MonoBehaviour
@@ -9,21 +11,22 @@ public class DrawerController : MonoBehaviour
     private float zIncrement = 0.457f;
     private bool notPickedUp = true;
     public Transform torch;
-
-    private void OnGUI()
-    {
-        if (Vector3.Distance(transform.position, Camera.main.transform.position) <= interactionDistance && isOpen && notPickedUp)
-        {
-            GUI.Label(new Rect(Screen.width / 2 - 75, Screen.height - 100, 300, 250), "Press 'R' to pick up the torch");
-        }
-        else if (Vector3.Distance(transform.position, Camera.main.transform.position) <= interactionDistance)
-        {
-            GUI.Label(new Rect(Screen.width / 2 - 75, Screen.height - 100, 200, 150), "Press 'E' to open the drawer");
-        }
-    }
+    public TMP_Text textContent;
 
     void Update()
     {
+        textContent.GameObject().SetActive(false);
+        
+        if (Vector3.Distance(transform.position, Camera.main.transform.position) <= interactionDistance && isOpen && notPickedUp)
+        {
+            textContent.GameObject().SetActive(true);
+            textContent.text = "Press 'R' to pick up the torch";
+        }
+        else if (Vector3.Distance(transform.position, Camera.main.transform.position) <= interactionDistance)
+        {
+            textContent.GameObject().SetActive(true);
+            textContent.text = "Press 'E' to open the drawer";
+        }
         if (Vector3.Distance(transform.position, Camera.main.transform.position) <= interactionDistance)
         {
             if (Input.GetKeyDown(KeyCode.E))
